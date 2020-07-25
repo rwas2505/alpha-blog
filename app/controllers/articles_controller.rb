@@ -9,19 +9,21 @@ class ArticlesController < ApplicationController
   end
 
   def new
-    
+    @article = Article.new()
   end
 
   def create
     # render plain: params[:article]
     @article = Article.new(params.require(:article).permit(:title, :description))
     # render plain: @article.inspect
-    @article.save
-    
-    # redirect_to article_path(@article) //the below code is shorthand for this line
-    redirect_to @article
-
-    #display errors like validation errors
+    if @article.save
+      #save the key of notice and value of "Article was crea... to the flash hash if article saves"
+      flash[:notice] = "Article was created successfully."
+      # redirect_to article_path(@article) //the below code is shorthand for this line
+      redirect_to @article
+    else
+      render 'new' #and show errors at top of new.html.erb
+    end
   end
   
 end

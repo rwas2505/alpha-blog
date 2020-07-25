@@ -16,7 +16,7 @@ class ArticlesController < ApplicationController
     # byebug
     @article = Article.find(params[:id])
   end
-
+  
   def create
     # render plain: params[:article]
     @article = Article.new(params.require(:article).permit(:title, :description))
@@ -30,7 +30,7 @@ class ArticlesController < ApplicationController
       render 'new' #and show errors at top of new.html.erb
     end
   end
-
+  
   def update
     # byebug
     @article = Article.find(params[:id])
@@ -41,7 +41,13 @@ class ArticlesController < ApplicationController
       render 'edit'
     end
   end
-
+  
+  def destroy
+    @article = Article.find(params[:id])
+    @article.destroy
+    redirect_to articles_path
+  end
+  
 
   
   

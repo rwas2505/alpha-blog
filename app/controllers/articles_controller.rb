@@ -1,7 +1,7 @@
 class ArticlesController < ApplicationController
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
+
   def show
-    # byebug
-    @article = Article.find(params[:id])
   end
 
   def index
@@ -13,28 +13,20 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    # byebug
-    @article = Article.find(params[:id])
   end
   
   def create
-    # render plain: params[:article]
-    @article = Article.new(params.require(:article).permit(:title, :description))
-    # render plain: @article.inspect
+    @article = Article.new(article_params)
     if @article.save
-      #save the key of notice and value of "Article was crea... to the flash hash if article saves"
       flash[:notice] = "Article was created successfully."
-      # redirect_to article_path(@article) //the below code is shorthand for this line
       redirect_to @article
     else
-      render 'new' #and show errors at top of new.html.erb
+      render 'new' 
     end
   end
   
   def update
-    # byebug
-    @article = Article.find(params[:id])
-    if @article.update(params.require(:article).permit(:title, :description))
+    if @article.update(article_params)
       flash[:notice] = "Article was updated successfully."
       redirect_to @article
     else
@@ -43,12 +35,17 @@ class ArticlesController < ApplicationController
   end
   
   def destroy
-    @article = Article.find(params[:id])
     @article.destroy
     redirect_to articles_path
   end
-  
 
-  
-  
+  private #anything below this is a private method
+
+  def set_article
+    @article = Article.find(params[:id])
+  end
+
+  def article_params
+    params.require(:article).permit(:title, :description)
+  end
 end
